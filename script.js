@@ -144,23 +144,51 @@ async function fetchDiscordData() {
 
 fetchDiscordData();
 
-function copyBnet() {
-    const text = 'mambo#21266';
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text);
-    } else {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
+let bnetCopyTimeout = null;
+
+function copyTextFallback(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.top = '0';
+    textarea.style.left = '0';
+    textarea.style.opacity = '0';
+    textarea.style.pointerEvents = 'none';
+    document.body.appendChild(textarea);
+    textarea.focus({ preventScroll: true });
+    textarea.select();
+    try {
         document.execCommand('copy');
-        document.body.removeChild(textarea);
+    } catch (err) {
+        console.error('Fallback copy failed', err);
     }
+    document.body.removeChild(textarea);
+}
+
+function copyBnet(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    const text = 'mambo#21266';
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).catch(() => {
+            copyTextFallback(text);
+        });
+    } else {
+        copyTextFallback(text);
+    }
+
     const tooltip = document.getElementById('bnetTooltip');
     if (tooltip) {
         tooltip.classList.add('show');
-        setTimeout(() => {
+        if (bnetCopyTimeout) {
+            clearTimeout(bnetCopyTimeout);
+        }
+        bnetCopyTimeout = setTimeout(() => {
             tooltip.classList.remove('show');
+            bnetCopyTimeout = null;
         }, 1500);
     }
 }
