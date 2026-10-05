@@ -143,3 +143,26 @@ async function fetchDiscordData() {
 }
 
 fetchDiscordData();
+
+function copyBnet() {
+    const text = 'mambo#21266';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+    } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+    }
+    const tooltip = document.getElementById('bnetTooltip');
+    if (tooltip) {
+        tooltip.classList.add('show');
+        setTimeout(() => {
+            tooltip.classList.remove('show');
+        }, 1500);
+    }
+}
+
+window.copyBnet = copyBnet;

@@ -223,11 +223,16 @@ body, html {
     align-items: center;
 }
 
-.icons a {
+.icons a, .icons .icon-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0;
+    position: relative;
+    cursor: url('assets/cursor.png') 31 31, auto !important;
 }
 
 .icons img {
@@ -238,9 +243,35 @@ body, html {
     transition: transform 0.25s ease, filter 0.25s ease;
 }
 
-.icons a:hover img {
+.icons a:hover img, .icons .icon-btn:hover img {
     transform: scale(1.08);
     filter: drop-shadow(0 0 6px rgba(184, 188, 252, 0.8));
+}
+
+.icon-tooltip {
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: rgba(18, 18, 28, 0.88);
+    color: #ffffff;
+    font-size: 0.72rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    font-family: 'Inter', sans-serif;
+    z-index: 20;
+}
+
+.icon-tooltip.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 .pop-element {
